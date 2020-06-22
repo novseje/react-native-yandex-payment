@@ -17,7 +17,10 @@ class YandexPayment: RCTViewManager, TokenizationModuleOutput {
     
     var callback: RCTResponseSenderBlock?
     var viewController: UIViewController?
-    
+
+    // set true to apply this fix
+    var dismissTwice = false
+
     func paymentTypeToString(paymentType: PaymentMethodType) -> String {
         switch paymentType {
             case .applePay:
@@ -128,6 +131,10 @@ class YandexPayment: RCTViewManager, TokenizationModuleOutput {
                             paymentMethodType: PaymentMethodType) {
         DispatchQueue.main.async {
             self.viewController!.dismiss(animated: true)
+            // Apple Pay has two popups
+            if self.dismissTwice {
+                self.viewController!.dismiss(animated: true)
+            }
         }
         if let callback = callback {
             callback([
@@ -146,6 +153,10 @@ class YandexPayment: RCTViewManager, TokenizationModuleOutput {
     func didFinish(on module: TokenizationModuleInput, with error: YandexCheckoutPaymentsError?) {
         DispatchQueue.main.async {
             self.viewController?.dismiss(animated: true)
+            // Apple Pay has two popups
+            if self.dismissTwice {
+                self.viewController?.dismiss(animated: true)
+            }
         }
     }
 }
