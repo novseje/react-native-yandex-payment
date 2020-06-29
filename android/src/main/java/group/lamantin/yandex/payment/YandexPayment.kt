@@ -53,6 +53,7 @@ class YandexPayment(reactContext: ReactApplicationContext) : ReactContextBaseJav
       shop.description,
       shop.token,
       shop.id,
+      SavePaymentMethod.OFF,
       payment.types,
       null,
       shop.returnUrl
